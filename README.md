@@ -6,17 +6,7 @@ This project uses radar spectrograms for Human Activity Recognition (HAR) and Ou
 
 ## Method Overview
 
-```mermaid
-flowchart LR
-    A["Radar Spectrogram"] --> B["CNN Patch Encoder"]
-    B --> C["Mamba Encoder"]
-    C --> D["Linear Classifier"]
-    C --> E["LSTM Dynamics Predictor"]
-    D --> F["Class Prediction and Energy Score"]
-    E --> G["Dynamics Error"]
-    F --> H["Fused OOD Score"]
-    G --> H
-```
+![Mamba-JEM latent dynamics and energy-based OOD architecture](assets/mamba-jem-ood-architecture.png)
 
 The training objective is:
 
