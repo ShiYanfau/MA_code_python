@@ -78,6 +78,43 @@ test_ood/
 
 Each split must contain at least `spectrograms` and `labels`. Labels may be class indices or one-hot vectors. Grouped experiments additionally require `sample_ids`, `source_ids`, or `subject_ids`.
 
+## Sliding Window Preprocessing
+
+Raw radar spectrograms are first segmented into fixed-length temporal windows before they are passed into the model. This keeps the model input size fixed and allows long radar sequences to contribute multiple training examples.
+
+For a sequence with temporal length `T`, window length `L`, and stride `S`, the number of generated windows is:
+
+```text
+num_windows = floor((T - L) / S) + 1
+```
+
+### DIAT-RadHAR windows
+
+DIAT images are resized to `(3, 128, 256)` and then sliced along the time axis:
+
+```text
+window_size = 128
+stride = 64
+
+(3, 128, 256)
+  -> window 1: [:, :, 0:128]
+  -> window 2: [:, :, 64:192]
+  -> window 3: [:, :, 128:256]
+```
+
+Each DIAT window has shape `(3, 128, 128)` and inherits the class label of the original radar image. The preprocessing script also keeps `source_ids` so windows can be traced back to their source image when needed.
+
+### UoG-20 windows
+
+UoG spectrograms are stored as `(freq_bins, time_steps)` samples. The recommended preprocessing uses:
+
+```text
+frame_length = 128
+stride = 64
+```
+
+Each generated window has shape `(43, 128)` and inherits the original sample-level activity label. In `data_prepared_Uog_ood_version_sl.py`, the generated windows also keep `sample_ids`, which makes it possible to aggregate window predictions back to full-sample metrics. This is why the repository supports both window-level training and sample-level evaluation/training.
+
 ## Quick Start
 
 ### 1. DIAT Experiment
