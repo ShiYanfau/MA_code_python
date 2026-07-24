@@ -88,6 +88,12 @@ For a sequence with temporal length `T`, window length `L`, and stride `S`, the 
 num_windows = floor((T - L) / S) + 1
 ```
 
+The sliding-window idea is illustrated below using the DIAT Doppler-time spectrogram example from the short keynote:
+
+<p align="center">
+  <img src="assets/sliding-window-preprocessing.png" width="90%" alt="Sliding window preprocessing schematic">
+</p>
+
 ### DIAT-RadHAR windows
 
 DIAT images are resized to `(3, 128, 256)` and then sliced along the time axis:
